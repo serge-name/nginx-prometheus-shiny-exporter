@@ -55,8 +55,8 @@ class MetricReqTime
     @val.each_key do |h|
       @val[h].each_key do |t|
         if @val[h][t].counted? && @val[h][t].fresh?
-          m += "#{METRIC_NAME}_avg{host=\"#{h}\",tag=\"#{t}\"\"} #{@val[h][t].avg}\n"
-          m += "#{METRIC_NAME}_max{host=\"#{h}\",tag=\"#{t}\"\"} #{@val[h][t].max}\n"
+          m += "#{METRIC_NAME}_avg{host=\"#{h}\",tag=\"#{t}\"} #{@val[h][t].avg}\n"
+          m += "#{METRIC_NAME}_max{host=\"#{h}\",tag=\"#{t}\"} #{@val[h][t].max}\n"
         end
       end
     end
