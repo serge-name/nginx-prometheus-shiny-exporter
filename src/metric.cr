@@ -11,7 +11,7 @@ class MetricStatusCounter
     @val[host][tag] = Hash(UInt16, UInt64).new unless @val[host].has_key?(tag)
     @val[host][tag][status] = 0 unless @val[host][tag].has_key?(status)
 
-    @val[host][tag][status] += 1.to_u64
+    @val[host][tag][status] += 1_u64
   end
 
   def to_s(io)
@@ -28,10 +28,10 @@ class MetricStatusCounter
 
     @val.each_key do |h|
       @val[h].each_key do |t|
-        m_100_399 = 0.to_u64
-        m_400_498 = 0.to_u64
-        m_499 = 0.to_u64
-        m_500_599 = 0.to_u64
+        m_100_399 = 0_u64
+        m_400_498 = 0_u64
+        m_499     = 0_u64
+        m_500_599 = 0_u64
 
         @val[h][t].each_key do |s|
           m += "#{METRIC_NAME}{host=\"#{h}\",tag=\"#{t}\",status=\"#{s}\"} #{@val[h][t][s]}\n"
