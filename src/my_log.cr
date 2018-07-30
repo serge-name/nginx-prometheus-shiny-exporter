@@ -3,8 +3,9 @@ class MyLog
   @prefix : String
   @io     : IO
 
-  def initialize(prefix : String)
+  def initialize(prefix : String, debug = false)
     @prefix = prefix
+    @debug = debug
     @io = STDERR
   end
 
@@ -13,7 +14,7 @@ class MyLog
   end
 
   def debug(message : String) : Nil
-    @io.puts("#{stamp}#{@prefix}: DEBUG: #{message}")
+    @io.puts("#{stamp}#{@prefix}: DEBUG: #{message}") if @debug
   end
 
   def error(message : String) : Nil

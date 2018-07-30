@@ -7,8 +7,8 @@ class Fbr::Collector
   COLLECTOR_BUF_IN_SIZE = 8
   COLLECTOR_BUF_OUT_SIZE = 10240
 
-  def initialize
-    @log = MyLog.new("collector")
+  def initialize(config : Config)
+    @log = MyLog.new("collector", debug: config.debug)
     @log.info("collector started")
     @c_syslog = Channel(LogMsg).new(COLLECTOR_BUF_IN_SIZE)
     @c_web_cmd = Channel(Bool).new

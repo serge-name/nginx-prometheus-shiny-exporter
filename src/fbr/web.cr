@@ -2,10 +2,11 @@ require "kemal"
 
 class Fbr::Web
 
-  def initialize(host : String, port : Int, ch_cmd : Channel(Bool), ch_data : Channel(String))
-    Kemal.config.host_binding = host
-    Kemal.config.port = port
+  def initialize(config : Config, ch_cmd : Channel(Bool), ch_data : Channel(String))
+    Kemal.config.host_binding = config.web_host
+    Kemal.config.port = config.web_port
     Kemal.config.powered_by_header = false
+    Kemal.config.logging = config.debug
     @ch_cmd = ch_cmd
     @ch_data = ch_data
   end

@@ -5,12 +5,12 @@ class Fbr::Syslog
   RX = %r{^<\d{1,3}>\S{3}\s+[0-3]?\d\s+[0-2]?\d:\d\d:\d\d\s(?:\S+\s)?(\S+):\s(.+)$}
   MSG_MAX_SIZE = 2048
 
-  def initialize(host : String, port : Int, ch : Channel(LogMsg))
-    @log = MyLog.new("syslog")
+  def initialize(config : Config, ch : Channel(LogMsg))
+    @log = MyLog.new("syslog", debug: config.debug)
     @s = UDPSocket.new
-    @s.bind(host, port)
+    @s.bind(config.syslog_host, config.syslog_port)
     @ch = ch
-    @log.info("syslog receiver started at udp://#{host}:#{port}")
+    @log.info("syslog receiver started at udp://#{config.syslog_host}:#{config.syslog_port}")
   end
 
   def run
