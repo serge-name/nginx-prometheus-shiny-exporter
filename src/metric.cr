@@ -58,7 +58,7 @@ class MetricStatusCounter
     end
 
     def name
-      (@min == @max) ? "#{@min}" : "#{@min}_#{@max}"
+      (@min == @max) ? "#{@min}" : "#{@min}-#{@max}"
     end
 
     def falls_into?(val : UInt16)
@@ -94,7 +94,7 @@ class MetricStatusCounter
 
         ranges.each do |r|
           if r.c > 0
-            m += "#{METRIC_NAME}_#{r.name}{host=\"#{h}\",tag=\"#{t}\"} #{r.c}\n"
+            m += "#{METRIC_NAME}_ranges{host=\"#{h}\",tag=\"#{t}\",range=\"#{r.name}\"} #{r.c}\n"
           end
         end
       end
