@@ -24,7 +24,7 @@ class Fbr::Collector
       loop do
         if ra_syslog.ready?
           m = @c_syslog.receive
-          @log.info("got a message: #{m}")
+          @log.debug("got a message: #{m}")
           if m.m[:type] == LogMsg::MSG_STATUS
             host   = m.m[:host].as(String)
             tag    = m.m[:tag].as(String)
