@@ -1,4 +1,5 @@
 class MyLog
+
   @prefix : String
   @io     : IO
 
@@ -22,4 +23,5 @@ class MyLog
   private def stamp : String
     @io.tty? ? Time.now.to_s("%FT%X%z ") : ""
   end
+
 end

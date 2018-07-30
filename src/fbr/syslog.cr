@@ -1,8 +1,6 @@
 require "socket"
 
 class Fbr::Syslog
-  @s   : UDPSocket
-#  @log : MyLog
 
   RX = %r{^<\d{1,3}>\S{3}\s+[0-3]?\d\s+[0-2]?\d:\d\d:\d\d\s(?:\S+\s)?(\S+):\s(.+)$}
   MSG_MAX_SIZE = 2048
@@ -43,4 +41,5 @@ class Fbr::Syslog
 
     LogMsg.new(tag, payload, ip)
   end
+
 end

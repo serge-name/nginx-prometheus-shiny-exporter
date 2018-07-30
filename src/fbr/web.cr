@@ -1,6 +1,7 @@
 require "kemal"
 
 class Fbr::Web
+
   def initialize(host : String, port : Int, ch_cmd : Channel(Bool), ch_data : Channel(String))
     Kemal.config.host_binding = host
     Kemal.config.port = port
@@ -26,4 +27,5 @@ class Fbr::Web
       Kemal.run
     end
   end
+
 end
