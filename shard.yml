@@ -1,0 +1,14 @@
+name: nginx-prometheus-shiny-exporter
+version: 0
+license: MIT
+
+crystal: 0.25.1
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+    branch: master
+
+targets:
+  nginx-prometheus-shiny-exporter:
+    main: src/main.cr
