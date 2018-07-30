@@ -8,6 +8,9 @@ clean:
 build:
 	shards build
 
+build_run: build
+	bin/nginx-prometheus-shiny-exporter
+
 .PHONY: spec
 
 spec:
