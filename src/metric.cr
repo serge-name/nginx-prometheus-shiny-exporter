@@ -4,6 +4,13 @@ module Metric(T)
     @val = Hash(String, Hash(String, T)).new
   end
 
+  def to_s(io)
+    io << "#<" << {{@type.name.id.stringify}}
+    io << ":0x" << object_id.to_s(16, io)
+    io << " @val=" << @val
+    io << ">"
+  end
+
 end
 
 
@@ -35,14 +42,6 @@ class MetricStatusCounter
     @val[host] = Hash(String, Item).new unless @val.has_key?(host)
     @val[host][tag] = Item.new unless @val[host].has_key?(tag)
     @val[host][tag].put(status)
-  end
-
-  def to_s(io)
-    io << "#<MetricStatusCounter:0x"
-    io << object_id.to_s(16, io)
-    io << " @val="
-    io << @val
-    io << ">"
   end
 
   def to_metrics
@@ -131,14 +130,6 @@ class MetricReqTime
     @val[host] = Hash(String, Item).new unless @val.has_key?(host)
     @val[host][tag] = Item.new unless @val[host].has_key?(tag)
     @val[host][tag].put(time)
-  end
-
-  def to_s(io)
-    io << "#<MetricReqTime:0x"
-    io << object_id.to_s(16, io)
-    io << " @val="
-    io << @val
-    io << ">"
   end
 
   def to_metrics
