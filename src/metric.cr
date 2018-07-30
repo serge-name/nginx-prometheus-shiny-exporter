@@ -11,6 +11,12 @@ module Metric(T)
     io << ">"
   end
 
+  def register(host, tag, value)
+    @val[host] = Hash(String, T).new unless @val.has_key?(host)
+    @val[host][tag] = T.new unless @val[host].has_key?(tag)
+    @val[host][tag].put(value)
+  end
+
 end
 
 
@@ -37,12 +43,6 @@ class MetricStatusCounter
   end
 
   include Metric(Item)
-
-  def inc(host, tag, status)
-    @val[host] = Hash(String, Item).new unless @val.has_key?(host)
-    @val[host][tag] = Item.new unless @val[host].has_key?(tag)
-    @val[host][tag].put(status)
-  end
 
   def to_metrics
     m =  "# HELP #{METRIC_NAME} A metric\n"
@@ -125,12 +125,6 @@ class MetricReqTime
   end
 
   include Metric(Item)
-
-  def register(host, tag, time)
-    @val[host] = Hash(String, Item).new unless @val.has_key?(host)
-    @val[host][tag] = Item.new unless @val[host].has_key?(tag)
-    @val[host][tag].put(time)
-  end
 
   def to_metrics
     m =  "# HELP #{METRIC_NAME} A metric\n"

@@ -30,7 +30,7 @@ class Fbr::Collector
             host   = m.m[:host].as(String)
             tag    = m.m[:tag].as(String)
             status = m.m[:status].as(UInt16)
-            @m_status_counter.inc(host, tag, status)
+            @m_status_counter.register(host, tag, status)
             @log.debug("@m_status_counter == #{@m_status_counter}")
           elsif m.m[:type] == LogMsg::MSG_REQ_TIME
             host   = m.m[:host].as(String)
