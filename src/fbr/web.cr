@@ -17,6 +17,7 @@ class Fbr::Web
     gzip true
 
     get "/metrics" do |env|
+      env.response.content_type = "text/plain; version=0.0.4; charset=utf-8"
       @ch_cmd.send(true)
       @ch_data.receive
     end
