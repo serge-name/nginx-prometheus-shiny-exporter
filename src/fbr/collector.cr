@@ -14,6 +14,7 @@ class Fbr::Collector
     @c_web_cmd = Channel(Bool).new
     @c_web_data = Channel(String).new(COLLECTOR_BUF_OUT_SIZE)
     @m_status_counter = MetricStatusCounter.new
+    @m_req_time = MetricReqTime.new
   end
 
   def run
@@ -30,14 +31,19 @@ class Fbr::Collector
             tag    = m.m[:tag].as(String)
             status = m.m[:status].as(UInt16)
             @m_status_counter.inc(host, tag, status)
-
             @log.debug("@m_status_counter == #{@m_status_counter}")
+          elsif m.m[:type] == LogMsg::MSG_REQ_TIME
+            host   = m.m[:host].as(String)
+            tag    = m.m[:tag].as(String)
+            time   = m.m[:time].as(Float64)
+            @m_req_time.register(host, tag, time)
+            @log.debug("@m_req_time == #{@m_req_time}")
           end
         end
 
         if ra_web_cmd.ready?
           @c_web_cmd.receive
-          @c_web_data.send(@m_status_counter.to_metrics) # FIXME: send everything as one String
+          @c_web_data.send(@m_status_counter.to_metrics + @m_req_time.to_metrics)
         end
 
         sleep(0.01)

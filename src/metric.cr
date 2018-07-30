@@ -53,5 +53,52 @@ class MetricStatusCounter
 
 end
 
-#class MetricGauge
-#end
+class MetricReqTime
+
+  METRIC_NAME = "nginx_request_time"
+  TIME_STEP = Time::Span.new(seconds: 10, nanoseconds: 0) # FIXME: make it configurable
+
+  def initialize
+    @val = Hash(String, Hash(String, Hash(Symbol, Float64 | UInt64 | Time))).new
+  end
+
+  def register(host, tag, time)
+    @val[host] = Hash(String, Hash(Symbol, Float64 | UInt64 | Time)).new unless @val.has_key?(host)
+    @val[host][tag] = Hash(Symbol, Float64 | UInt64 | Time).new unless @val[host].has_key?(tag)
+    unless @val[host][tag].has_key?(:timestamp) && (Time.utc_now - @val[host][tag][:timestamp].as(Time)) <= TIME_STEP
+      @val[host][tag][:c_time] = 0_f64
+      @val[host][tag][:c_req] = 0_u64
+      @val[host][tag][:time_max] = 0_f64
+      @val[host][tag][:timestamp] = Time.utc_now
+    end
+
+    @val[host][tag][:c_time] = @val[host][tag][:c_time].as(Float64) + time
+    @val[host][tag][:time_max] = time if @val[host][tag][:time_max].as(Float64) < time
+    @val[host][tag][:c_req] = @val[host][tag][:c_req].as(UInt64) + 1_u64
+  end
+
+  def to_s(io)
+    io << "#<MetricReqTime:0x"
+    io << object_id.to_s(16, io)
+    io << " @val="
+    io << @val
+    io << ">"
+  end
+
+  def to_metrics
+    m =  "# HELP #{METRIC_NAME} A metric\n"
+    m += "# TYPE #{METRIC_NAME} gauge\n"
+
+    @val.each_key do |h|
+      @val[h].each_key do |t|
+        if (@val[h][t][:c_req].as(UInt64) > 0) && (Time.utc_now - @val[h][t][:timestamp].as(Time)) <= TIME_STEP
+          avg = @val[h][t][:c_time].as(Float64) / @val[h][t][:c_req].as(UInt64)
+          m += "#{METRIC_NAME}_avg{host=\"#{h}\",tag=\"#{t}\"\"} #{avg}\n"
+          m += "#{METRIC_NAME}_max{host=\"#{h}\",tag=\"#{t}\"\"} #{@val[h][t][:time_max]}\n"
+        end
+      end
+    end
+
+    m
+  end
+end

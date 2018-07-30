@@ -7,7 +7,7 @@ class LogMsg
 
   def initialize(tag : String, payload : String, ip)
     parts = payload.split('|')
-    @m = Hash(Symbol, String | Float32 | UInt16 | Time).new
+    @m = Hash(Symbol, String | Float64 | UInt16 | Time).new
 
     @m[:tag] = tag
     @m[:timestamp] = Time.utc_now
@@ -15,7 +15,7 @@ class LogMsg
     if parts[0] === MSG_REQ_TIME && parts.size == 3
       @m[:type] = parts[0]
       @m[:host] = parts[1]
-      @m[:time] = parts[2].to_f32
+      @m[:time] = parts[2].to_f64
     elsif parts[0] === MSG_STATUS && parts.size == 3
       @m[:type] = parts[0]
       @m[:host] = parts[1]
