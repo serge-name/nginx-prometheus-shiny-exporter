@@ -42,6 +42,34 @@ class MetricStatusCounter
     end
   end
 
+  class StatusRange
+    getter c
+
+    @c = 0_u64
+
+    def initialize(min : UInt16, max : UInt16)
+      @min  = min
+      @max  = max
+    end
+
+    def initialize(exact : UInt16)
+      @min  = exact
+      @max  = exact
+    end
+
+    def name
+      (@min == @max) ? "#{@min}" : "#{@min}_#{@max}"
+    end
+
+    def falls_into?(val : UInt16)
+      (val >= @min) && (val <= @max)
+    end
+
+    def register(status : UInt16, value : UInt64)
+      @c += value if falls_into?(status)
+    end
+  end
+
   include Metric(Item)
 
   def to_metrics
@@ -50,23 +78,25 @@ class MetricStatusCounter
 
     @val.each_key do |h|
       @val[h].each_key do |t|
-        m_100_399 = 0_u64
-        m_400_498 = 0_u64
-        m_499     = 0_u64
-        m_500_599 = 0_u64
+        ranges = [
+          StatusRange.new(100, 399),
+          StatusRange.new(400, 498),
+          StatusRange.new(499),
+          StatusRange.new(500, 599),
+        ]
 
         @val[h][t].each do |s, v|
           m += "#{METRIC_NAME}{host=\"#{h}\",tag=\"#{t}\",status=\"#{s}\"} #{v}\n"
-          m_100_399 += v if s >= 100 && s <= 399
-          m_400_498 += v if s >= 400 && s <= 498
-          m_499     += v     if s == 499
-          m_500_599 += v if s >= 500 && s <= 599
+          ranges.each do |r|
+            r.register(s, v)
+          end
         end
 
-        m += "#{METRIC_NAME}_100_399{host=\"#{h}\",tag=\"#{t}\"} #{m_100_399}\n" if m_100_399 > 0
-        m += "#{METRIC_NAME}_400_498{host=\"#{h}\",tag=\"#{t}\"} #{m_400_498}\n" if m_400_498 > 0
-        m += "#{METRIC_NAME}_499{host=\"#{h}\",tag=\"#{t}\"} #{m_499}\n"         if m_499 > 0
-        m += "#{METRIC_NAME}_500_599{host=\"#{h}\",tag=\"#{t}\"} #{m_500_599}\n" if m_500_599 > 0
+        ranges.each do |r|
+          if r.c > 0
+            m += "#{METRIC_NAME}_#{r.name}{host=\"#{h}\",tag=\"#{t}\"} #{r.c}\n"
+          end
+        end
       end
     end
 
