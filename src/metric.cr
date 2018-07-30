@@ -1,7 +1,5 @@
 class MetricStatusCounter
 
-  getter val
-
   METRIC_NAME = "nginx_request_status"
 
   def initialize
