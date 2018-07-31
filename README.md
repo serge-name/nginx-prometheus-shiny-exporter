@@ -31,5 +31,5 @@ I use this application on Russian National Platform for Open Education https://o
 
 # FAQ
 
-Q: Why shiny?
+Q: Why shiny?<br>
 A: Since it is writen in Crystal
