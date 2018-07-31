@@ -11,9 +11,9 @@ class Config
   def initialize
     @debug       = false
     @web_host    = "0.0.0.0"
-    @web_port    = 10018
+    @web_port    = 9467
     @syslog_host = "127.0.0.1"
-    @syslog_port = 10019
+    @syslog_port = 9467
 
     OptionParser.parse! do |parser|
       parser.banner = "Usage: <CMD> [arguments]"
