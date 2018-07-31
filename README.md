@@ -1,6 +1,6 @@
 # Description
 
-This application collects custom formatted log from nginx via Syslog, counts all the data and exports metrics to Prometheus server.
+This application collects custom formatted log from [nginx](https://nginx.org) via Syslog, counts all the data and exports metrics to [Prometheus](https://prometheus.io/) server.
 
 ```
 ┌───────┐                     ┌─────────────────────────────────┐
