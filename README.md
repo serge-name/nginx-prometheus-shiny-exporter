@@ -28,6 +28,7 @@ I use this application on Russian National Platform for Open Education https://o
 
 1. [Install Crystal](https://crystal-lang.org/docs/installation/)
 2. `apt install build-essential pkg-config zlib1g-dev libssl-dev`
+3. `make build`
 
 # FAQ
 
