@@ -22,6 +22,13 @@ class Fbr::Web
       @ch_data.receive
     end
 
+    get "/" do |env|
+      env.response.content_type = "text/html; charset=utf-8"
+      "<html><head><title>Nginx Shiny Exporter</title></head>
+<body><h1>Nginx Shiny Exporter</h1>
+<p><a href=\"/metrics\">Metrics</a></p></body></html>"
+    end
+
     error 404 do |env|
       env.response.content_type = "text/plain"
       "404\n"
