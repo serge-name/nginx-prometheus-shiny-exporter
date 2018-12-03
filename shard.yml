@@ -2,7 +2,7 @@ name: nginx-prometheus-shiny-exporter
 version: 0
 license: MIT
 
-crystal: 0.25.1
+crystal: 0.27.0
 
 dependencies:
   kemal:
