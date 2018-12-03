@@ -30,6 +30,52 @@ I use this application on Russian National Platform for Open Education https://o
 2. `apt install build-essential pkg-config zlib1g-dev libssl-dev`
 3. `make build`
 
+# Usage
+
+Create a virtual host:
+
+```
+log_format collect_status 'stts|$host|$status';
+log_format collect_time   'reqt|$host|$request_time';
+
+server {
+  listen 127.0.0.1:8877 default_server;
+
+  access_log syslog:server=127.0.0.1:9467,tag=default collect_status;
+  access_log syslog:server=127.0.0.1:9467,tag=default collect_time;
+
+  location / {
+    # …
+  }
+
+  location /special/ {
+    access_log syslog:server=127.0.0.1:9467,tag=special collect_status;
+    access_log syslog:server=127.0.0.1:9467,tag=special collect_time;
+    # …
+  }
+}
+```
+
+Do several requests and check the metrics:
+
+```
+$ curl -s http://localhost:9467/metrics
+# HELP nginx_request_status A metric
+# TYPE nginx_request_status counter
+nginx_request_status{host="127.0.0.1",tag="default",status="404"} 2
+nginx_request_status{host="127.0.0.1",tag="default",status="499"} 3
+nginx_request_status{host="127.0.0.1",tag="default",status="503"} 2
+nginx_request_status{host="127.0.0.1",tag="default",status="204"} 1
+nginx_request_status_ranges{host="127.0.0.1",tag="default",range="100-399"} 1
+nginx_request_status_ranges{host="127.0.0.1",tag="default",range="400-498"} 2
+nginx_request_status_ranges{host="127.0.0.1",tag="default",range="499"} 3
+nginx_request_status_ranges{host="127.0.0.1",tag="default",range="500-599"} 2
+# HELP nginx_request_time A metric
+# TYPE nginx_request_time counter
+nginx_request_time_sum{host="127.0.0.1",tag="default"} 0.0
+nginx_request_time_count{host="127.0.0.1",tag="default"} 8
+```
+
 # FAQ
 
 Q: Why shiny?<br>
