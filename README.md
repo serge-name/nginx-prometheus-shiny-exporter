@@ -76,6 +76,20 @@ nginx_request_time_sum{host="127.0.0.1",tag="default"} 0.0
 nginx_request_time_count{host="127.0.0.1",tag="default"} 8
 ```
 
+Add to prometheus a block like this:
+
+```yaml
+scrape_configs:
+  - job_name: nginx
+    scrape_interval: 5s
+    scrape_timeout:  5s
+    static_configs:
+      - targets:
+          - 192.0.2.8:9467
+```
+
+If you use [Grafana](https://grafana.com), a sample dashboard can be found in `contrib/` directory of the project.
+
 # FAQ
 
 Q: Why shiny?<br>
