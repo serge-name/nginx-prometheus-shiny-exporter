@@ -79,4 +79,4 @@ nginx_request_time_count{host="127.0.0.1",tag="default"} 8
 # FAQ
 
 Q: Why shiny?<br>
-A: Since it is writen in Crystal
+A: Because it is writen in Crystal
