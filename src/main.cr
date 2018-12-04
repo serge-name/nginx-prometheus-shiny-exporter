@@ -1,5 +1,6 @@
 require "./config"
 require "./fbr"
+require "./sd_notify"
 
 config = Config.new
 
@@ -8,4 +9,10 @@ collector.run
 Fbr::Syslog.new(config, collector.c_syslog).run
 Fbr::Web.new(config, collector.c_web_cmd, collector.c_web_data).run
 
-loop { sleep(10) } # main loop: do nothing
+sd = SdNotify.new(config)
+sd.ready
+
+loop {
+  sd.watchdog
+  sd.sleep
+}
