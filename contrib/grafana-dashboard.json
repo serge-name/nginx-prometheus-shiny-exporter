@@ -57,7 +57,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "delta(nginx_request_status_ranges{host=\"$host\"}[1m])",
+          "expr": "delta(nginx_request_status_ranges{host=\"$host\",tag=\"$tag\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -141,7 +141,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "delta(nginx_request_status_ranges{host=\"$host\",range=\"500-599\"}[1m])",
+          "expr": "delta(nginx_request_status_ranges{host=\"$host\",tag=\"$tag\",range=\"500-599\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -224,7 +224,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "delta(nginx_request_time_sum{host=\"$host\"}[1m]) / delta(nginx_request_time_count{host=\"$host\"}[1m])",
+          "expr": "delta(nginx_request_time_sum{host=\"$host\",tag=\"$tag\"}[1m]) / delta(nginx_request_time_count{host=\"$host\",tag=\"$tag\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -308,7 +308,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "delta(nginx_request_time_sum{host=\"$host\"}[5m]) / delta(nginx_request_time_count{host=\"$host\"}[5m])",
+          "expr": "delta(nginx_request_time_sum{host=\"$host\",tag=\"$tag\"}[5m]) / delta(nginx_request_time_count{host=\"$host\",tag=\"$tag\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -392,7 +392,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "delta(nginx_request_time_sum{host=\"$host\"}[15m]) / delta(nginx_request_time_count{host=\"$host\"}[15m])",
+          "expr": "delta(nginx_request_time_sum{host=\"$host\",tag=\"$tag\"}[15m]) / delta(nginx_request_time_count{host=\"$host\",tag=\"$tag\"}[15m])",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -448,6 +448,7 @@
       {
         "allValue": null,
         "current": {
+          "tags": [],
           "text": "example.com",
           "value": "example.com"
         },
@@ -459,6 +460,31 @@
         "name": "host",
         "options": [],
         "query": "label_values(nginx_request_status, host)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "tags": [],
+          "text": "default",
+          "value": "default"
+        },
+        "datasource": "prometheus.example.com",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Tag",
+        "multi": false,
+        "name": "tag",
+        "options": [],
+        "query": "label_values(nginx_request_status, tag)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
