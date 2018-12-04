@@ -38,11 +38,19 @@ Create a virtual host:
 log_format collect_status 'stts|$host|$status';
 log_format collect_time   'reqt|$host|$request_time';
 
+map $request_uri $is_not_static {
+  default        1;
+  "~^/media/"    0;
+  "~^/static/"   0;
+}
+
 server {
   listen 127.0.0.1:8877 default_server;
 
   access_log syslog:server=127.0.0.1:9467,tag=default collect_status;
   access_log syslog:server=127.0.0.1:9467,tag=default collect_time;
+  access_log syslog:server=127.0.0.1:9467,tag=app collect_status if=$is_not_static;
+  access_log syslog:server=127.0.0.1:9467,tag=app collect_time   if=$is_not_static;
 
   location / {
     # …
